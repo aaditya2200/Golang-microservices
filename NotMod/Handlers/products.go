@@ -81,4 +81,15 @@ func (p *Products) updateProducts(id int, w http.ResponseWriter, r *http.Request
 	if err != nil {
 		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 	}
+
+	err = data.UpdateProduct(id, prod)
+	if err == data.ErrProductuctNotFound {
+		http.Error(w, "Product Not Found", http.StatusNotFound)
+		return
+	}
+
+	if err != nil {
+		http.Error(w, "Product Not Found", http.StatusInternalServerError)
+		return
+	}
 }
