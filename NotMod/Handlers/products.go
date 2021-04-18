@@ -1,3 +1,19 @@
+// Package Classification Of Product API
+//
+// Documentation for Product API demo
+//
+// Schemes: http
+// BasePath: /
+// Version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+// swagger:meta
+
+
 package Handlers
 
 import (
@@ -15,6 +31,27 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// A list of products
+// swagger:response productResponse
+type productResponse struct {
+	// All products in the system
+	// in: body
+	Body []data.Product
+}
+
+// swagger:response noContent
+type productsNoContent struct {
+
+}
+
+// swagger:parameters updateProduct
+type productIDParameterWrapper struct {
+	// The ID of the product to be updated
+	// in: path
+	// required: true
+	ID int `json:"id"`
+}
+
 type Products struct {
 	l *log.Logger
 }
@@ -23,7 +60,10 @@ func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
 }
 
-
+// swagger:route GET /products products listProducts
+// Returns a lft of products
+// responses:
+//   200: productResponse 
 
 func (p *Products) GetProducts(w http.ResponseWriter, r *http.Request) {
 	lp := data.GetProducts()
@@ -33,6 +73,12 @@ func (p *Products) GetProducts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// swagger:route PUT /products/{id} products updateProducts
+// Returns a lft of products
+// responses:
+//   201: noContent
+
+// Updates an existing product
 func (p *Products) AddProduct(w http.ResponseWriter, r *http.Request) {
 
 
@@ -78,7 +124,7 @@ func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 		if err != nil {
 			http.Error(
 				w,
-				fmt.Sprintf("Error validating product %s: ", err), 
+				fmt.Sprintf("Error validating product %s: ", err),
 				http.StatusBadRequest)
 			return
 		}
