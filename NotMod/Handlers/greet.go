@@ -25,7 +25,3 @@ func (h *Hello) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Data %s\n", d)
 }
-
-func main() {
-	
-}
